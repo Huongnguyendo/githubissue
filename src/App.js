@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
 import IssueList from "./issueList/index";
-import Pagination from "./pagination/index";
 import SearchBox from "./searchBox/index";
+// import PageNavigation from "./pageNavigation/index";
 import { Alert } from "react-bootstrap";
 import { css } from "@emotion/core";
 import BarLoader from "react-spinners/BarLoader";
+import Pagination from "react-js-pagination";
 import "./App.css";
 
 const override = css`
@@ -18,6 +19,8 @@ function App() {
   let [repo, setRepo] = useState("");
   let [owner, setOwner] = useState("");
   let [loading, setLoading] = useState(false);
+  let [totalPage, setTotalPage] = useState();
+  let [data, setData] = useState();
 
   const handleSubmit = () => {
     let { owner, repo } = getOwnerRepo(keyword);
@@ -29,7 +32,6 @@ function App() {
     setOwner(owner);
     setRepo(repo);
     setError(null);
-    getIssues();
   };
 
   const getOwnerRepo = (value) => {
@@ -39,14 +41,21 @@ function App() {
     // if value and key name are same, we can write as above
   };
 
-  const getIssues = async () => {
+  const getIssues = async (page) => {
     try {
       setLoading(true);
-      let url = `https://api.github.com/repos/${owner}/${repo}/issues`;
-      let response = await fetch(url);
-      if (response.status == 200) {
-        let data = await response.json();
-        console.log("data", data);
+      let url = `https://api.github.com/repos/${owner}/${repo}/issues?page=${page}`;
+      const response = await fetch(url);
+      const data = await response.json();
+      setData(data);
+      console.log("data", data);
+      const link = response.headers.get("link");
+      if (link) {
+        console.log(link);
+        const getTotalPage = link.match(/page=(\d+)>; rel="last"/); // \d represent number + mean one to many
+        if (getTotalPage) {
+          setTotalPage(parseInt(getTotalPage[1]));
+        }
       } else {
         setError(`API has some problem, error code : ${response.status}`);
       }
@@ -74,8 +83,23 @@ function App() {
         color={"#123abc"}
         loading={loading}
       />
-      <IssueList />
-      <Pagination />
+      <IssueList data={data} />
+      {totalPage && (
+        <div>
+          <Pagination
+            itemClass="page-item"
+            linkClass="page-link"
+            activePage={1}
+            itemsCountPerPage={30}
+            totalItemsCount={30 * totalPage}
+            pageRangeDisplayed={5}
+            onChange={(clickedPage) => {
+              getIssues(clickedPage);
+            }}
+          />
+        </div>
+        // <PageNavigation totalPage={totalPage} getIssues={getIssues} />
+      )}
     </div>
   );
 }
