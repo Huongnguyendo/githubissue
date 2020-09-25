@@ -9,9 +9,9 @@ import Pagination from "react-js-pagination";
 import "./App.css";
 
 const override = css`
-  display: block;
-  margin: 30px auto;
-  border-color: blue;
+	display: block;
+	margin: 30px auto;
+	border-color: blue;
 `;
 function App() {
   let [keyword, setKeyword] = useState("");
@@ -34,12 +34,12 @@ function App() {
     setError(null);
   };
 
-  const getOwnerRepo = (value) => {
-    let owner = value.split("/")[0];
-    let repo = value.split("/")[1];
-    return { owner, repo };
-    // if value and key name are same, we can write as above
-  };
+	const getOwnerRepo = (value) => {
+		let owner = value.split("/")[0];
+		let repo = value.split("/")[1];
+		return { owner, repo };
+		// if value and key name are same, we can write as above
+	};
 
   const getIssues = async (page) => {
     try {
@@ -66,12 +66,25 @@ function App() {
     }
   };
 
-  useEffect(() => {
-    if (!owner || !repo) {
-      return;
-    }
-    getIssues();
-  }, [owner, repo]);
+	const getComment = async () => {
+		const url = `https://api.github.com/repos/${owner}/${repo}/issues`;
+		const response = await fetch(url);
+		const data = await response.json();
+		// console.log("data comm", data[0].comments_url);
+		const commentURL = data[0].comments_url;
+		console.log("comment url", commentURL);
+		const commentResponse = await fetch(commentURL);
+		const commentData = await commentResponse.json();
+		console.log("comment data man", commentData);
+		console.log("comment data choise", commentData[1]);
+	};
+	useEffect(() => {
+		if (!owner || !repo) {
+			return;
+		}
+		getIssues();
+		getComment();
+	}, [owner, repo]);
 
   return (
     <div>
@@ -102,6 +115,7 @@ function App() {
       )}
     </div>
   );
+
 }
 
 export default App;
