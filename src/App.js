@@ -66,11 +66,25 @@ function App() {
     }
   };
 
+  const getComment = async () => {
+    const url = `https://api.github.com/repos/${owner}/${repo}/issues`;
+    const response = await fetch(url);
+    const data = await response.json();
+    // console.log("data comm", data[0].comments_url);
+    const commentURL = data[0].comments_url;
+    console.log("comment url", commentURL);
+    const commentResponse = await fetch(commentURL);
+    const commentData = await commentResponse.json();
+    console.log("comment data man", commentData);
+    console.log("comment data choise", commentData[1]);
+  };
+
   useEffect(() => {
     if (!owner || !repo) {
       return;
     }
     getIssues();
+    getComment();
   }, [owner, repo]);
 
   return (
