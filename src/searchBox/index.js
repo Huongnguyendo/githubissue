@@ -9,7 +9,7 @@ import {
   Button,
 } from "react-bootstrap";
 
-function SearchBox({ setKeyword, handleSubmit, getIssues }) {
+function SearchBox({ setKeyword, handleSubmit }) {
   return (
     <div>
       <Navbar bg="light" expand="sm">

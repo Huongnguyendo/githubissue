@@ -9,9 +9,9 @@ import Pagination from "react-js-pagination";
 import "./App.css";
 
 const override = css`
-	display: block;
-	margin: 30px auto;
-	border-color: blue;
+  display: block;
+  margin: 30px auto;
+  border-color: blue;
 `;
 function App() {
   let [keyword, setKeyword] = useState("");
@@ -35,12 +35,12 @@ function App() {
     setError(null);
   };
 
-	const getOwnerRepo = (value) => {
-		let owner = value.split("/")[0];
-		let repo = value.split("/")[1];
-		return { owner, repo };
-		// if value and key name are same, we can write as above
-	};
+  const getOwnerRepo = (value) => {
+    let owner = value.split("/")[0];
+    let repo = value.split("/")[1];
+    return { owner, repo };
+    // if value and key name are same, we can write as above
+  };
 
   const getIssues = async (page) => {
     try {
@@ -67,7 +67,6 @@ function App() {
     }
   };
 
-
   const getComment = async () => {
     const url = `https://api.github.com/repos/${owner}/${repo}/issues`;
     const response = await fetch(url);
@@ -89,7 +88,6 @@ function App() {
     getComment();
   }, [owner, repo]);
 
-
   return (
     <div>
       <SearchBox
@@ -104,7 +102,9 @@ function App() {
         color={"#123abc"}
         loading={loading}
       />
-      <IssueList data={data} repo={repo} owner={owner}/>
+      <div>
+        <IssueList data={data} repo={repo} owner={owner} />
+      </div>
       {totalPage && (
         <div>
           <Pagination
@@ -124,7 +124,6 @@ function App() {
       )}
     </div>
   );
-
 }
 
 export default App;

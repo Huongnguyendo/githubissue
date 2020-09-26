@@ -6,8 +6,8 @@ import { css } from "@emotion/core";
 import ClipLoader from "react-spinners/ClipLoader";
 import ReactModal from "react-modal";
 import ReactMarkdown from "react-markdown";
-import SyntaxHighlighter from 'react-syntax-highlighter';
-import { docco } from 'react-syntax-highlighter/dist/esm/styles/hljs';
+import SyntaxHighlighter from "react-syntax-highlighter";
+import { docco } from "react-syntax-highlighter/dist/esm/styles/hljs";
 
 function IssueList({ data, owner, repo }) {
   const [show, setShow] = useState(false);
@@ -25,13 +25,12 @@ function IssueList({ data, owner, repo }) {
   // each comment
   let [comment, setComment] = useState([]);
 
-
   const toggleModal = async (id) => {
     setIssueID(id);
     const url = `https://api.github.com/repos/${owner}/${repo}/issues/${id}`;
     const response = await fetch(url);
     const data = await response.json();
-    
+
     setSingleIssue(data);
     console.log("comments number", singleIssue.comments);
     if (data.comments > 0) {
@@ -45,9 +44,7 @@ function IssueList({ data, owner, repo }) {
     // if(showModal) {
     //   <ListItem owner={owner} repo={repo} id={id} showModal={showModal}/>
     // }
-    
   };
-
 
   if (!data) {
     return (
@@ -60,62 +57,68 @@ function IssueList({ data, owner, repo }) {
     );
   }
 
-
-  return ( 
-    data.map((issue) => {
+  return data.map((issue) => {
     return (
-      <Container className="issue">
-        {console.log("issue: ", issue)}
+      <Container className="issue" style={{ width: "100vw", height: "170px" }}>
         <Row>
-          <Col sm={4}>
+          <Col sm={2}>
             <div className="user">
               <img className="user-img" src={issue.user.avatar_url} />
               <p>{issue.user.login}</p>
-              <p>ID: {issue.user.id}</p>
+              <div style={{ fontSize: "15px" }}>ID:{issue.user.id}</div>
             </div>
           </Col>
-          <Col sm={8}>
+          <Col sm={10}>
             <div className="issue-content">
-              <h2>
-                <a href="#" > 
+              <h5>
                 {/* onClick={()=> toggleModal(issue.number)} */}
-                   {issue.title} 
+                <a href="#" onClick={handleShow}>
+                  {issue.title}
                 </a>
-              </h2>
-              
+              </h5>
+
               <div>
-                {issue.labels.length > 0 ? 
-                  issue.labels.map((label) => {return (
-                    <Badge variant="warning" className="mr-2">{label.name}</Badge>
-                  )}) : ""}
+                {issue.labels.length > 0
+                  ? issue.labels.map((label) => {
+                      return (
+                        <Badge variant="warning" className="mr-2">
+                          {label.name}
+                        </Badge>
+                      );
+                    })
+                  : ""}
               </div>
+              <div style={{ height: "50px", overflow: "hidden" }}>
+                {issue.body}
+                <br />
+                <div>...</div>
+              </div>
+              {/* <div>
+                <ReactMarkdown source={issue.body} />
+              </div> */}
               <div>
-                <ReactMarkdown
-                 source={issue.body} />
+                #{issue.number} - opened
+                <Moment fromNow>{issue.created_at}</Moment> - Comment:{" "}
+                {issue.comments}
               </div>
-              <div>#{issue.number} opened <Moment fromNow>{issue.created_at}</Moment></div>
             </div>
           </Col>
         </Row>
+        <ListItem show={show} onHide={handleClose} handleClose={handleClose} />
       </Container>
     );
-    })
-    
+  });
 
-  )
-
-
-//   return (
-//     <div>
-//       <ListItem show={show} onHide={handleClose} handleClose={handleClose} />
-//       <div>
-//         {data.map((item) => (
-//           <div onClick={handleShow}>{item.title}</div>
-//         ))}
-//       </div>
-//     </div>
-//   );
-
+  //   return (
+  //     <div>
+  //       <ListItem show={show} onHide={handleClose} handleClose={handleClose} />
+  //       <div>
+  //         {data.map((item) => (
+  //           <div onClick={handleShow}>{item.title}</div>
+  //         ))}
+  //       </div>
+  //     </div>
+  //   );
 }
 
 export default IssueList;
