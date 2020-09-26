@@ -9,13 +9,12 @@ import ReactMarkdown from "react-markdown";
 import SyntaxHighlighter from "react-syntax-highlighter";
 import { docco } from "react-syntax-highlighter/dist/esm/styles/hljs";
 
-function IssueList({ data, owner, repo }) {
+function IssueList({ data, owner, repo, toggleModal }) {
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
-  // chosen issue ID when clicked
-  let [issueID, setIssueID] = useState(null);
+  
   //  chosen issue
   let [singleIssue, setSingleIssue] = useState({});
   // set open-close state of modal
@@ -25,26 +24,7 @@ function IssueList({ data, owner, repo }) {
   // each comment
   let [comment, setComment] = useState([]);
 
-  const toggleModal = async (id) => {
-    setIssueID(id);
-    const url = `https://api.github.com/repos/${owner}/${repo}/issues/${id}`;
-    const response = await fetch(url);
-    const data = await response.json();
-
-    setSingleIssue(data);
-    console.log("comments number", singleIssue.comments);
-    if (data.comments > 0) {
-      const urlComment = `https://api.github.com/repos/${owner}/${repo}/issues/${id}/comments`;
-      const responseComment = await fetch(urlComment);
-      const dataComment = await responseComment.json();
-      setComments(dataComment);
-    }
-    setShowModal(true);
-
-    // if(showModal) {
-    //   <ListItem owner={owner} repo={repo} id={id} showModal={showModal}/>
-    // }
-  };
+  
 
   if (!data) {
     return (
@@ -71,8 +51,8 @@ function IssueList({ data, owner, repo }) {
           <Col sm={10}>
             <div className="issue-content">
               <h5>
-                {/* onClick={()=> toggleModal(issue.number)} */}
-                <a href="#" onClick={handleShow}>
+                {/* onClick={handleShow}*/}
+                <a href="#" onClick={()=> toggleModal(issue.number)}>
                   {issue.title}
                 </a>
               </h5>
@@ -104,7 +84,7 @@ function IssueList({ data, owner, repo }) {
             </div>
           </Col>
         </Row>
-        <ListItem show={show} onHide={handleClose} handleClose={handleClose} />
+        <ListItem number={issue.number} show={show} handleClose={handleClose} />
       </Container>
     );
   });
