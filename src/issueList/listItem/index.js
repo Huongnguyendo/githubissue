@@ -5,8 +5,8 @@ import ReactMarkdown from "react-markdown";
 import SyntaxHighlighter from "react-syntax-highlighter";
 import Moment from "react-moment";
 
-function ListItem({ id, owner, repo, show, handleClose }) {
-  let [issueID, setIssueID] = useState(null);
+function ListItem({ number, owner, repo, show, handleClose }) {
+  let [issueNumber, setIssueNumber] = useState(null);
   let [singleIssue, setSingleIssue] = useState({});
   // set open-close state of modal
   let [showModal, setShowModal] = useState(false);
@@ -14,6 +14,27 @@ function ListItem({ id, owner, repo, show, handleClose }) {
   let [comments, setComments] = useState([]);
   // each comment
   let [comment, setComment] = useState([]);
+
+  const toggleModal = async (number) => {
+    setIssueNumber(number);
+    const url = `https://api.github.com/repos/${owner}/${repo}/issues/${number}`;
+    const response = await fetch(url);
+    const data = await response.json();
+
+    setSingleIssue(data);
+    console.log("comments number", singleIssue.comments);
+    if (data.comments > 0) {
+      const urlComment = `https://api.github.com/repos/${owner}/${repo}/issues/${number}/comments`;
+      const responseComment = await fetch(urlComment);
+      const dataComment = await responseComment.json();
+      setComments(dataComment);
+    }
+    setShowModal(true);
+
+    // if(showModal) {
+    //   <ListItem owner={owner} repo={repo} id={id} showModal={showModal}/>
+    // }
+  };
 
   return (
     <div>
