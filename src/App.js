@@ -21,6 +21,7 @@ function App() {
   let [loading, setLoading] = useState(false);
   let [totalPage, setTotalPage] = useState();
   let [data, setData] = useState();
+  let [page, setPage] = useState();
 
   const handleSubmit = () => {
     let { owner, repo } = getOwnerRepo(keyword);
@@ -44,7 +45,7 @@ function App() {
   const getIssues = async (page) => {
     try {
       setLoading(true);
-      let url = `https://api.github.com/repos/${owner}/${repo}/issues?page=${page}`;
+      let url = `https://api.github.com/repos/${owner}/${repo}/issues?page=${page}&per_page=10`;
       const response = await fetch(url);
       const data = await response.json();
       setData(data);
@@ -83,7 +84,7 @@ function App() {
     if (!owner || !repo) {
       return;
     }
-    getIssues();
+    getIssues(1);
     getComment();
   }, [owner, repo]);
 
@@ -103,11 +104,12 @@ function App() {
           <Pagination
             itemClass="page-item"
             linkClass="page-link"
-            activePage={1}
-            itemsCountPerPage={30}
-            totalItemsCount={30 * totalPage}
+            activePage={page}
+            itemsCountPerPage={10}
+            totalItemsCount={500}
             pageRangeDisplayed={5}
             onChange={(clickedPage) => {
+              setPage(clickedPage);
               getIssues(clickedPage);
             }}
           />
