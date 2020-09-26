@@ -90,7 +90,11 @@ function App() {
 
   return (
     <div>
-      <SearchBox setKeyword={setKeyword} handleSubmit={handleSubmit} />
+      <SearchBox
+        setKeyword={setKeyword}
+        handleSubmit={handleSubmit}
+        getIssues={getIssues}
+      />
       {error && <Alert variant={"danger"}>{error}</Alert>}
       <BarLoader
         css={override}
