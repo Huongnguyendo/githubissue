@@ -104,7 +104,7 @@ function App() {
         color={"#123abc"}
         loading={loading}
       />
-      <IssueList data={data} />
+      <IssueList data={data} repo={repo} owner={owner}/>
       {totalPage && (
         <div>
           <Pagination
