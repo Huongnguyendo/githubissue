@@ -21,6 +21,7 @@ function App() {
   let [loading, setLoading] = useState(false);
   let [totalPage, setTotalPage] = useState();
   let [data, setData] = useState();
+  let [page, setPage] = useState();
 
   const handleSubmit = () => {
     let { owner, repo } = getOwnerRepo(keyword);
@@ -44,7 +45,7 @@ function App() {
   const getIssues = async (page) => {
     try {
       setLoading(true);
-      let url = `https://api.github.com/repos/${owner}/${repo}/issues?page=${page}`;
+      let url = `https://api.github.com/repos/${owner}/${repo}/issues?page=${page}&per_page=10`;
       const response = await fetch(url);
       const data = await response.json();
       setData(data);
@@ -66,29 +67,36 @@ function App() {
     }
   };
 
-	const getComment = async () => {
-		const url = `https://api.github.com/repos/${owner}/${repo}/issues`;
-		const response = await fetch(url);
-		const data = await response.json();
-		// console.log("data comm", data[0].comments_url);
-		const commentURL = data[0].comments_url;
-		console.log("comment url", commentURL);
-		const commentResponse = await fetch(commentURL);
-		const commentData = await commentResponse.json();
-		console.log("comment data man", commentData);
-		console.log("comment data choise", commentData[1]);
-	};
-	useEffect(() => {
-		if (!owner || !repo) {
-			return;
-		}
-		getIssues();
-		getComment();
-	}, [owner, repo]);
+
+  const getComment = async () => {
+    const url = `https://api.github.com/repos/${owner}/${repo}/issues`;
+    const response = await fetch(url);
+    const data = await response.json();
+    // console.log("data comm", data[0].comments_url);
+    const commentURL = data[0].comments_url;
+    console.log("comment url", commentURL);
+    const commentResponse = await fetch(commentURL);
+    const commentData = await commentResponse.json();
+    console.log("comment data man", commentData);
+    console.log("comment data choise", commentData[1]);
+  };
+
+  useEffect(() => {
+    if (!owner || !repo) {
+      return;
+    }
+    getIssues(1);
+    getComment();
+  }, [owner, repo]);
+
 
   return (
     <div>
-      <SearchBox setKeyword={setKeyword} handleSubmit={handleSubmit} />
+      <SearchBox
+        setKeyword={setKeyword}
+        handleSubmit={handleSubmit}
+        getIssues={getIssues}
+      />
       {error && <Alert variant={"danger"}>{error}</Alert>}
       <BarLoader
         css={override}
@@ -102,11 +110,12 @@ function App() {
           <Pagination
             itemClass="page-item"
             linkClass="page-link"
-            activePage={1}
-            itemsCountPerPage={30}
-            totalItemsCount={30 * totalPage}
+            activePage={page}
+            itemsCountPerPage={10}
+            totalItemsCount={500}
             pageRangeDisplayed={5}
             onChange={(clickedPage) => {
+              setPage(clickedPage);
               getIssues(clickedPage);
             }}
           />
