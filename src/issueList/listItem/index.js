@@ -20,24 +20,24 @@ function ListItem({ id, owner, repo, show, handleClose }) {
       <Modal
         show={show}
         onHide={handleClose}
-        isOpen={showModal}
-        contentLabel="Inline Styles Modal Example"
-        onRequestClose={() => setShowModal(false)}
-        shouldCloseOnOverlayClick={true}
-        style={{
-          overlay: {
-            backgroundColor: "rgb(238, 238, 238, 0.3)",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          },
-          content: {
-            color: "black",
-            width: "80%",
-            height: "80%",
-            position: "relative",
-          },
-        }}
+        // isOpen={showModal}
+        // contentLabel="Inline Styles Modal Example"
+        // onRequestClose={() => setShowModal(false)}
+        // shouldCloseOnOverlayClick={true}
+        // style={{
+        //   overlay: {
+        //     backgroundColor: "rgb(238, 238, 238, 0.3)",
+        //     display: "flex",
+        //     justifyContent: "center",
+        //     alignItems: "center",
+        //   },
+        //   content: {
+        //     color: "black",
+        //     width: "80%",
+        //     height: "80%",
+        //     position: "relative",
+        //   },
+        // }}
       >
         <h1>
           <Badge variant="success">{singleIssue.state}</Badge>{" "}

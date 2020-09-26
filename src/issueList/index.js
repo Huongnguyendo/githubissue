@@ -75,6 +75,11 @@ function IssueList({ data, owner, repo }) {
                 <a href="#" onClick={handleShow}>
                   {issue.title}
                 </a>
+                <ListItem
+                  show={show}
+                  onHide={handleClose}
+                  handleClose={handleClose}
+                />
               </h5>
 
               <div>
@@ -90,8 +95,6 @@ function IssueList({ data, owner, repo }) {
               </div>
               <div style={{ height: "50px", overflow: "hidden" }}>
                 {issue.body}
-                <br />
-                <div>...</div>
               </div>
               {/* <div>
                 <ReactMarkdown source={issue.body} />
@@ -104,7 +107,6 @@ function IssueList({ data, owner, repo }) {
             </div>
           </Col>
         </Row>
-        <ListItem show={show} onHide={handleClose} handleClose={handleClose} />
       </Container>
     );
   });
