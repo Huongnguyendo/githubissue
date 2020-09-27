@@ -13,6 +13,8 @@ const override = css`
   margin: 30px auto;
   border-color: blue;
 `;
+
+
 function App() {
   let [keyword, setKeyword] = useState("");
   let [error, setError] = useState(null);
@@ -23,6 +25,7 @@ function App() {
   let [data, setData] = useState();
   let [page, setPage] = useState();
 
+  
   const handleSubmit = () => {
     let { owner, repo } = getOwnerRepo(keyword);
     console.log({ owner, repo });

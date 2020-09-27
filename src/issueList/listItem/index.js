@@ -1,11 +1,31 @@
-import React from "react";
+import React, {useState} from "react";
 import { Modal, Button, Col, Row, Badge } from "react-bootstrap";
 // import ReactModal from "react-modal";
 import ReactMarkdown from "react-markdown";
 // import SyntaxHighlighter from "react-syntax-highlighter";
 import Moment from "react-moment";
 
-function ListItem({ show, handleClose, singleIssue, comments }) {
+function ListItem({ toggleModal, owner, repo, setIssueNumber, show, handleClose, singleIssue, comments }) {
+  // each comment
+  let [comment, setComment] = useState([]);
+
+  const postComment = async () => {
+    console.log("fkre");
+    if (!comment) {
+      alert("comment is required");
+      return false;
+    }
+    const issue = { body: comment };
+    const url = `https://api.github.com/repos/${owner}/${repo}/issues/${setIssueNumber}/comments`;
+
+    const response = await fetch(url, {
+      method: "POST",
+      body: JSON.stringify(issue),
+    });
+    setComment("");
+    toggleModal(setIssueNumber);
+  };
+
   return (
     <div>
       <Modal
@@ -73,6 +93,7 @@ function ListItem({ show, handleClose, singleIssue, comments }) {
           ) : (
             <div>There's no comment </div>
           )}
+          
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleClose}>
