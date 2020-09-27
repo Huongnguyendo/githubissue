@@ -47,3 +47,8 @@
   justify-content: center;
   align-items: center;
 }
+
+.markdown {
+  width: 100%;
+  word-wrap: break-word;
+}
