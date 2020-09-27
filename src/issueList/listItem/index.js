@@ -1,64 +1,36 @@
-import React, { useState } from "react";
-import { Modal, Button, Col, Container, Row, Badge } from "react-bootstrap";
-import ReactModal from "react-modal";
+import React from "react";
+import { Modal, Button, Col, Row, Badge } from "react-bootstrap";
+// import ReactModal from "react-modal";
 import ReactMarkdown from "react-markdown";
-import SyntaxHighlighter from "react-syntax-highlighter";
+// import SyntaxHighlighter from "react-syntax-highlighter";
 import Moment from "react-moment";
 
-function ListItem({ number, owner, repo, show, handleClose }) {
-  let [issueNumber, setIssueNumber] = useState(null);
-  let [singleIssue, setSingleIssue] = useState({});
-  // set open-close state of modal
-  let [showModal, setShowModal] = useState(false);
-  // list of all comments
-  let [comments, setComments] = useState([]);
-  // each comment
-  let [comment, setComment] = useState([]);
-
-  const toggleModal = async (number) => {
-    setIssueNumber(number);
-    const url = `https://api.github.com/repos/${owner}/${repo}/issues/${number}`;
-    const response = await fetch(url);
-    const data = await response.json();
-
-    setSingleIssue(data);
-    console.log("comments number", singleIssue.comments);
-    if (data.comments > 0) {
-      const urlComment = `https://api.github.com/repos/${owner}/${repo}/issues/${number}/comments`;
-      const responseComment = await fetch(urlComment);
-      const dataComment = await responseComment.json();
-      setComments(dataComment);
-    }
-    setShowModal(true);
-
-    // if(showModal) {
-    //   <ListItem owner={owner} repo={repo} id={id} showModal={showModal}/>
-    // }
-  };
-
+function ListItem({ show, handleClose, singleIssue, comments }) {
   return (
     <div>
       <Modal
+        centered
         show={show}
         onHide={handleClose}
-        isOpen={showModal}
-        contentLabel="Inline Styles Modal Example"
-        onRequestClose={() => setShowModal(false)}
-        shouldCloseOnOverlayClick={true}
-        style={{
-          overlay: {
-            backgroundColor: "rgb(238, 238, 238, 0.3)",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          },
-          content: {
-            color: "black",
-            width: "80%",
-            height: "80%",
-            position: "relative",
-          },
-        }}
+        size="xl"
+        // isOpen={showModal}
+        // contentLabel="Inline Styles Modal Example"
+        // onRequestClose={() => setShowModal(false)}
+        // shouldCloseOnOverlayClick={true}
+        // style={{
+        //   overlay: {
+        //     backgroundColor: "rgb(238, 238, 238, 0.3)",
+        //     display: "flex",
+        //     justifyContent: "center",
+        //     alignItems: "center",
+        //   },
+        //   content: {
+        //     color: "black",
+        //     width: "80%",
+        //     height: "80%",
+        //     position: "relative",
+        //   },
+        // }}
       >
         <h1>
           <Badge variant="success">{singleIssue.state}</Badge>{" "}
@@ -73,14 +45,15 @@ function ListItem({ number, owner, repo, show, handleClose }) {
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
+          <ReactMarkdown>{singleIssue.body}</ReactMarkdown>
           {singleIssue.comments > 0 ? (
             <div>
-              <h3 style={{ marginTop: 20, marginBottom: 20 }}>Comments</h3>
+              <h3>Comments</h3>
               {comments.map((comment) => {
                 return (
                   <div>
                     <Row>
-                      <Col sm={3}>
+                      <Col sm={2}>
                         <img
                           className="user-comment-pic"
                           src={comment.user.avatar_url}
@@ -88,7 +61,7 @@ function ListItem({ number, owner, repo, show, handleClose }) {
                         />
                         <p>{comment.user.login}</p>
                       </Col>
-                      <Col sm={9}>
+                      <Col sm={10}>
                         <ReactMarkdown>{comment.body}</ReactMarkdown>
                         <Moment fromNow>{comment.created_at}</Moment>
                       </Col>
