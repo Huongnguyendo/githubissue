@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import { Modal, Button, Col, Row, Badge, Image } from "react-bootstrap";
 
 // import ReactModal from "react-modal";
