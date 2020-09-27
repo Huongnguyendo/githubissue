@@ -6,7 +6,13 @@ import ReactMarkdown from "react-markdown";
 import Moment from "react-moment";
 import "../../App.css";
 
-function ListItem({ show, handleClose, singleIssue, comments }) {
+function ListItem({
+  show,
+  handleClose,
+  singleIssue,
+  comments,
+  loadMoreComments,
+}) {
   return (
     <div>
       <Modal
@@ -46,7 +52,7 @@ function ListItem({ show, handleClose, singleIssue, comments }) {
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <ReactMarkdown>{singleIssue.body}</ReactMarkdown>
+          <ReactMarkdown className="markdown">{singleIssue.body}</ReactMarkdown>
           {singleIssue.comments > 0 ? (
             <div className="commentPart">
               <h3>Comments</h3>
@@ -79,19 +85,37 @@ function ListItem({ show, handleClose, singleIssue, comments }) {
                             src={comment.user.avatar_url}
                             alt=""
                           />
-                          <div>{comment.user.login}</div>
+                          <div
+                            style={{ width: "100%", wordWrap: "break-word" }}
+                          >
+                            {comment.user.login}
+                          </div>
                           <div style={{ color: "grey" }}>
                             <Moment fromNow>{comment.created_at}</Moment>
                           </div>
                         </div>
                       </Col>
                       <Col sm={9}>
-                        <ReactMarkdown>{comment.body}</ReactMarkdown>
+                        <ReactMarkdown className="markdown">
+                          {comment.body}
+                        </ReactMarkdown>
                       </Col>
                     </Row>
                   </div>
                 );
               })}
+              {singleIssue.comments > 5 ? (
+                singleIssue.comments - comments.length == 0 ? (
+                  "No more comments"
+                ) : (
+                  <Button onClick={() => loadMoreComments(singleIssue.number)}>
+                    Load {singleIssue.comments - comments.length} more
+                    comment(s)
+                  </Button>
+                )
+              ) : (
+                <></>
+              )}
             </div>
           ) : (
             <div>There's no comment </div>

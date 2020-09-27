@@ -7,8 +7,13 @@ import "../App.css";
 function IssueList({ owner, repo, data }) {
   let [singleIssue, setSingleIssue] = useState({});
   let [comments, setComments] = useState([]);
+  let [commentPage, setCommentPage] = useState(5);
+
   const [show, setShow] = useState(false);
-  const handleClose = () => setShow(false);
+  const handleClose = () => {
+    setShow(false);
+    setCommentPage(5);
+  };
   const handleShow = () => setShow(true);
 
   const toggleModal = async (number) => {
@@ -20,12 +25,19 @@ function IssueList({ owner, repo, data }) {
     setSingleIssue(chosenIssueData);
     // if there are comments, fetch comments
     if (chosenIssueData.comments > 0) {
-      const urlComment = `https://api.github.com/repos/${owner}/${repo}/issues/${number}/comments`;
+      const urlComment = `https://api.github.com/repos/${owner}/${repo}/issues/${number}/comments?page=1&per_page=${commentPage}`;
       const responseComment = await fetch(urlComment);
       const dataComment = await responseComment.json();
       setComments(dataComment);
+      console.log(dataComment);
     }
     // setShowModal(true);
+  };
+
+  const loadMoreComments = (number) => {
+    commentPage += 5;
+    setCommentPage(commentPage);
+    toggleModal(number);
   };
 
   if (!data) {
@@ -34,7 +46,7 @@ function IssueList({ owner, repo, data }) {
         This page is use for getting GitHub issues. <br />
         Please type owner and repo in search box to get issue list related.
         <br />
-        Search should be in "owner/repo" format. Enjoy! *^^*
+        Search should be in "owner/repo" format. Enjoy! -^__^-
       </div>
     );
   }
@@ -102,6 +114,7 @@ function IssueList({ owner, repo, data }) {
         handleClose={handleClose}
         comments={comments}
         singleIssue={singleIssue}
+        loadMoreComments={loadMoreComments}
       />
     </div>
   );

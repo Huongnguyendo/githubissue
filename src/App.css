@@ -6,7 +6,6 @@
 }
 
 .issue:hover {
-  cursor: pointer;
   background-color: #f0efef;
 }
 
@@ -47,4 +46,9 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+}
+
+.markdown {
+  width: 100%;
+  word-wrap: break-word;
 }

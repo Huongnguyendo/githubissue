@@ -11,7 +11,7 @@ import "./App.css";
 const override = css`
   display: block;
   margin: 30px auto;
-  border-color: blue;
+  border-color: #007bff;
 `;
 function App() {
   let [keyword, setKeyword] = useState("");
@@ -84,14 +84,6 @@ function App() {
         id="top"
       />
       {error && <Alert variant={"danger"}>{error}</Alert>}
-      <BarLoader
-        css={override}
-        size={150}
-        color={"#123abc"}
-        loading={loading}
-      />
-
-      <IssueList owner={owner} repo={repo} data={data} />
 
       {totalPage && (
         <div
@@ -99,6 +91,7 @@ function App() {
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
+            marginTop: "20px",
           }}
         >
           <Pagination
@@ -111,9 +104,40 @@ function App() {
             onChange={(clickedPage) => {
               setPage(clickedPage);
               getIssues(clickedPage);
+              if (loading) {
+                return (
+                  <BarLoader
+                    css={override}
+                    size={150}
+                    color={"#007bff"}
+                    loading={loading}
+                  />
+                );
+              }
             }}
           />
-          &nbsp;
+        </div>
+        // <PageNavigation totalPage={totalPage} getIssues={getIssues} />
+      )}
+
+      <BarLoader
+        css={override}
+        size={150}
+        color={"#007bff"}
+        loading={loading}
+      />
+
+      <IssueList owner={owner} repo={repo} data={data} />
+
+      {totalPage && (
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            marginBottom: "20px",
+          }}
+        >
           <a href="#top">Go to top</a>
         </div>
         // <PageNavigation totalPage={totalPage} getIssues={getIssues} />
