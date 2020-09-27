@@ -10,8 +10,10 @@ function IssueList({ owner, repo, data }) {
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+  const [issueNumber, setIssueNumber] = useState(null);
 
   const toggleModal = async (number) => {
+    setIssueNumber(number);
     const url = `https://api.github.com/repos/${owner}/${repo}/issues/${number}`;
     const response = await fetch(url);
     const chosenIssueData = await response.json();
@@ -28,6 +30,7 @@ function IssueList({ owner, repo, data }) {
     // setShowModal(true);
   };
 
+  
   if (!data) {
     return (
       <div style={{ textAlign: "center", padding: "30px" }}>
@@ -98,6 +101,10 @@ function IssueList({ owner, repo, data }) {
         );
       })}
       <ListItem
+        toggleModal={toggleModal}
+        issueNumber={issueNumber}
+        owner={owner}
+        repo={repo}
         show={show}
         handleClose={handleClose}
         comments={comments}
