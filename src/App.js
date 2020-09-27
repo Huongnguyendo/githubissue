@@ -93,6 +93,7 @@ function App() {
         setKeyword={setKeyword}
         handleSubmit={handleSubmit}
         getIssues={getIssues}
+        id="top"
       />
       {error && <Alert variant={"danger"}>{error}</Alert>}
       <BarLoader
@@ -105,7 +106,13 @@ function App() {
       <IssueList owner={owner} repo={repo} data={data} />
 
       {totalPage && (
-        <div>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
           <Pagination
             itemClass="page-item"
             linkClass="page-link"
@@ -118,6 +125,8 @@ function App() {
               getIssues(clickedPage);
             }}
           />
+          &nbsp;
+          <a href="#top">Go to top</a>
         </div>
         // <PageNavigation totalPage={totalPage} getIssues={getIssues} />
       )}
