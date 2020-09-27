@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import { Col, Container, Row, Badge } from "react-bootstrap";
+import { Col, Container, Row, Badge, Image } from "react-bootstrap";
 import Moment from "react-moment";
 import ListItem from "./listItem/index";
+import "../App.css";
 
 function IssueList({ owner, repo, data }) {
   let [singleIssue, setSingleIssue] = useState({});
@@ -39,26 +40,24 @@ function IssueList({ owner, repo, data }) {
   }
 
   return (
-    <div>
+    <div className="issueList">
       {data.map((issue) => {
         return (
-          <Container
-            className="issue"
-            style={{ width: "100vw", height: "170px" }}
-          >
+          <Container className="issue">
             <Row>
-              <Col sm={2}>
+              <Col sm={3}>
                 <div className="user">
-                  <img
+                  <Image
+                    roundedCircle
                     className="user-img"
                     src={issue.user.avatar_url}
                     alt=""
                   />
-                  <p>{issue.user.login}</p>
-                  <div style={{ fontSize: "15px" }}>ID:{issue.user.id}</div>
+                  <div>{issue.user.login}</div>
+                  <div>ID:{issue.user.id}</div>
                 </div>
               </Col>
-              <Col sm={10}>
+              <Col sm={9}>
                 <div className="issue-content">
                   <h5>
                     <a
@@ -86,8 +85,9 @@ function IssueList({ owner, repo, data }) {
                   <div style={{ height: "50px", overflow: "hidden" }}>
                     {issue.body}
                   </div>
-                  <div>
-                    #{issue.number} - opened
+                  <div>...</div>
+                  <div style={{ color: "grey", fontSize: "15px" }}>
+                    #{issue.number} - opened&nbsp;
                     <Moment fromNow>{issue.created_at}</Moment> - Comment:{" "}
                     {issue.comments}
                   </div>

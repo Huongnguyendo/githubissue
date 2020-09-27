@@ -1,9 +1,10 @@
 import React from "react";
-import { Modal, Button, Col, Row, Badge } from "react-bootstrap";
+import { Modal, Button, Col, Row, Badge, Image } from "react-bootstrap";
 // import ReactModal from "react-modal";
 import ReactMarkdown from "react-markdown";
 // import SyntaxHighlighter from "react-syntax-highlighter";
 import Moment from "react-moment";
+import "../../App.css";
 
 function ListItem({ show, handleClose, singleIssue, comments }) {
   return (
@@ -32,38 +33,60 @@ function ListItem({ show, handleClose, singleIssue, comments }) {
         //   },
         // }}
       >
-        <h1>
-          <Badge variant="success">{singleIssue.state}</Badge>{" "}
-          {singleIssue.title}
-        </h1>
         <Modal.Header closeButton>
           <Modal.Title>
-            <p>
+            <h4>
+              <Badge variant="success">{singleIssue.state}</Badge>{" "}
+              {singleIssue.title}
+            </h4>
+            <div>
               Issue #{singleIssue.number} opened{" "}
               <Moment fromNow>{singleIssue.created_at}</Moment>
-            </p>
+            </div>
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <ReactMarkdown>{singleIssue.body}</ReactMarkdown>
           {singleIssue.comments > 0 ? (
-            <div>
+            <div className="commentPart">
               <h3>Comments</h3>
               {comments.map((comment) => {
                 return (
-                  <div>
+                  <div
+                    style={{
+                      margin: "10px",
+                      fontSize: "15px",
+                      border: "1px solid #7b7979",
+                      borderRadius: "10px",
+                      width: "90%",
+                      padding: "10px",
+                    }}
+                  >
                     <Row>
-                      <Col sm={2}>
-                        <img
-                          className="user-comment-pic"
-                          src={comment.user.avatar_url}
-                          alt=""
-                        />
-                        <p>{comment.user.login}</p>
+                      <Col sm={3}>
+                        <div
+                          style={{
+                            textAlign: "center",
+                            display: "flex",
+                            flexDirection: "column",
+                            justifyContent: "center",
+                            alignItems: "center",
+                          }}
+                        >
+                          <Image
+                            roundedCircle
+                            className="user-comment-pic"
+                            src={comment.user.avatar_url}
+                            alt=""
+                          />
+                          <div>{comment.user.login}</div>
+                          <div style={{ color: "grey" }}>
+                            <Moment fromNow>{comment.created_at}</Moment>
+                          </div>
+                        </div>
                       </Col>
-                      <Col sm={10}>
+                      <Col sm={9}>
                         <ReactMarkdown>{comment.body}</ReactMarkdown>
-                        <Moment fromNow>{comment.created_at}</Moment>
                       </Col>
                     </Row>
                   </div>
@@ -74,11 +97,6 @@ function ListItem({ show, handleClose, singleIssue, comments }) {
             <div>There's no comment </div>
           )}
         </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
-            Close
-          </Button>
-        </Modal.Footer>
       </Modal>
     </div>
   );
