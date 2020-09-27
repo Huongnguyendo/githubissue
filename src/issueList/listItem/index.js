@@ -1,11 +1,15 @@
-import React from "react";
+import React, {useState} from "react";
 import { Modal, Button, Col, Row, Badge } from "react-bootstrap";
 // import ReactModal from "react-modal";
 import ReactMarkdown from "react-markdown";
-// import SyntaxHighlighter from "react-syntax-highlighter";
+import SyntaxHighlighter from "react-syntax-highlighter";
 import Moment from "react-moment";
 
-function ListItem({ show, handleClose, singleIssue, comments }) {
+function ListItem({ toggleModal, owner, repo, setIssueNumber, show, handleClose, singleIssue, comments }) {
+  // each comment
+  let [comment, setComment] = useState([]);
+
+
   return (
     <div>
       <Modal
@@ -73,6 +77,7 @@ function ListItem({ show, handleClose, singleIssue, comments }) {
           ) : (
             <div>There's no comment </div>
           )}
+          
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleClose}>
