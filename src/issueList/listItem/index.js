@@ -1,10 +1,12 @@
-import React from "react";
+import React, {useState} from "react";
 import { Modal, Button, Col, Row, Badge, Image } from "react-bootstrap";
+
 // import ReactModal from "react-modal";
 import ReactMarkdown from "react-markdown";
-// import SyntaxHighlighter from "react-syntax-highlighter";
+import SyntaxHighlighter from "react-syntax-highlighter";
 import Moment from "react-moment";
 import "../../App.css";
+
 
 function ListItem({
   show,
@@ -12,7 +14,8 @@ function ListItem({
   singleIssue,
   comments,
   loadMoreComments,
-}) {
+}) {let [comment, setComment] = useState([]);
+
   return (
     <div>
       <Modal
@@ -120,6 +123,7 @@ function ListItem({
           ) : (
             <div>There's no comment </div>
           )}
+          
         </Modal.Body>
       </Modal>
     </div>

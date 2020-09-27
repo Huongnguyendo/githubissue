@@ -6,6 +6,7 @@ import { Alert } from "react-bootstrap";
 import { css } from "@emotion/core";
 import BarLoader from "react-spinners/BarLoader";
 import Pagination from "react-js-pagination";
+import SyntaxHighlighter from "react-syntax-highlighter";
 import "./App.css";
 
 const override = css`
@@ -13,6 +14,8 @@ const override = css`
   margin: 30px auto;
   border-color: #007bff;
 `;
+
+
 function App() {
   let [keyword, setKeyword] = useState("");
   let [error, setError] = useState(null);
@@ -23,6 +26,7 @@ function App() {
   let [data, setData] = useState();
   let [page, setPage] = useState();
 
+  
   const handleSubmit = () => {
     let { owner, repo } = getOwnerRepo(keyword);
     console.log({ owner, repo });
@@ -36,6 +40,14 @@ function App() {
   };
 
   const getOwnerRepo = (value) => {
+
+    if(value.substring(0,4) == "http") {
+      let array = value.split("/");
+      let owner = value.split("/")[array.length -2];
+      let repo = value.split("/")[array.length -1];
+      return { owner, repo };
+    }
+    
     let owner = value.split("/")[0];
     let repo = value.split("/")[1];
     return { owner, repo };
