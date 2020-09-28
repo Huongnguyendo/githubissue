@@ -12,7 +12,7 @@ function IssueList({ owner, repo, data }) {
   const [show, setShow] = useState(false);
   const handleClose = () => {
     setShow(false);
-//     setCommentPage(5);
+    setCommentPage(5);
   };
   const handleShow = () => setShow(true);
   const [issueNumber, setIssueNumber] = useState(null);
