@@ -57,7 +57,7 @@ function App() {
   const getIssues = async (page) => {
     try {
       setLoading(true);
-      let url = `https://api.github.com/repos/${owner}/${repo}/issues?page=${page}&per_page=10`;
+      let url = `https://api.github.com/repos/${owner}/${repo}/issues?page=${page}`;
       const response = await fetch(url);
       const data = await response.json();
       setData(data);
@@ -111,7 +111,7 @@ function App() {
             linkClass="page-link"
             activePage={page}
             itemsCountPerPage={10}
-            totalItemsCount={500}
+            totalItemsCount={totalPage*20}
             pageRangeDisplayed={5}
             onChange={(clickedPage) => {
               setPage(clickedPage);
